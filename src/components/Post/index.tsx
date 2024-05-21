@@ -152,21 +152,17 @@ export default function Post({ post, id }: Props) {
 
 
 
-        {imgArray.length > 0 && (
+        {post?.data()?.imgs && post.data()?.imgs.length > 0 && (
           <div className="flex flex-wrap">
-            {imgArray.map((img: string, index: number) => (
+            {post.data()?.imgs.map((img: string, index: number) => (
               <img
                 key={index}
                 onClick={() => navigate(`/posts/${id}`)}
-                className={`rounded-2xl mr-2 ${imgArray.length === 1 ? 'w-full' : 'w-32 h-32 object-cover'}`}
+                className="rounded-2xl mr-2 w-32 h-32 object-cover"
                 src={img}
                 alt={`Post image ${index}`}
               />
             ))}
-            </div>
-            )
-            
-            }
 
 
     
