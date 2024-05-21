@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+25+Charted&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html {
+  height: 100%;
+  line-height: 1.2;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #ffffff;
+  font-family: "Lato", "Lato-fallback", "Arial", sans-serif;
+  font-size: 14px;
+  line-height: 1.428571429;
+  margin: 0;
+  
+}
+
+/* npm install -D tailwindcss postcss autoprefixer */
