@@ -35,7 +35,7 @@ export default function Sidebar() {
               setProfile(docSnap.data() as UserData);
             }
           };
-          fetchUser();
+          fetchUser()
       } else {
         setProfile(null)
         console.log('yeah that wat happened')
@@ -88,7 +88,7 @@ export default function Sidebar() {
           </button>
 
 
-          <div className="hoverEffect text-gray-700 flex items-center justify-center xl:justify-start mt-auto">
+          <div className="hover:bg-slate-200 text-gray-700 flex items-center justify-center xl:justify-start mt-auto w-full p-2 rounded-3xl cursor-pointer">
             <img
               onClick={onSignOut}
               src={profile?.userImg ?? "https://t4.ftcdn.net/jpg/03/78/40/11/360_F_378401105_9LAka9cRxk5Ey2wwanxrLTFCN1U51DL0.jpg"}
@@ -99,7 +99,7 @@ export default function Sidebar() {
               <h4 className="font-bold">{profile?.name}</h4>
               <p className="text-gray-500">{profile?.username}</p>
             </div>
-            <EllipsisHorizontalIcon className="h-5 xl:ml-8 hidden xl:inline" />
+            <EllipsisHorizontalIcon className="h-5 xl:ml-auto hidden xl:inline" />
           </div>
         </>
       ) : (

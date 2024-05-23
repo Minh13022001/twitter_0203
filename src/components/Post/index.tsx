@@ -49,7 +49,7 @@ export default function Post({ post, id }: Props) {
       }
     );
     // return unsubscribe
-  }, [db]);
+  }, [db])
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -92,7 +92,7 @@ export default function Post({ post, id }: Props) {
   }
   // console.log(post?.data()?.timestamp.toDate(), 7777)
 
-  const imgArray = post?.data()?.images as [];
+  const imgArray = post?.data()?.images ?? [];
 
   return (
     <div className="flex p-3  border-b border-gray-200">
@@ -152,20 +152,46 @@ export default function Post({ post, id }: Props) {
 
 
 
-        {post?.data()?.imgs && post.data()?.imgs.length > 0 && (
-          <div className="flex flex-wrap">
-            {post.data()?.imgs.map((img: string, index: number) => (
+        {/* {imgArray.length > 0 && (
+          <div className={`flex rounded-2xl overflow-hidden flex-wrap ${imgArray.length === 1 ? '' : 'gap-[3px] max-h-64'} `}>
+            {imgArray.map((img: string, index: number) => (
               <img
                 key={index}
                 onClick={() => navigate(`/posts/${id}`)}
-                className="rounded-2xl mr-2 w-32 h-32 object-cover"
+                className={`  ${imgArray.length === 1 ? 'w-full h-full rounded-2xl' : imgArray.length == 2 ? 'w-1/2' : imgArray.length == 3 ? ' w-[49%] h-full  ' : 'w-[49%] flex-1'} h-32 object-cover`}
                 src={img}
                 alt={`Post image ${index}`}
               />
             ))}
+          </div>
+        )} */}
 
 
-    
+{imgArray.length > 0 && (
+  <div className={`flex rounded-2xl flex-col overflow-hidden flex-wrap ${imgArray.length === 1 ? '' : 'gap-[3px] h-64'}`}>
+    {imgArray.map((img: string, index: number) => {
+      const imgClass = imgArray.length === 1
+        ? 'w-full h-full rounded-2xl'
+        : imgArray.length === 2
+        ? 'w-1/2 flex-1'
+        : imgArray.length === 3
+        ? index === 0
+          ? 'w-[49%]'
+          : 'w-[257px] h-[126px]'
+        : 'h-[49%]  flex-1';
+
+      return (
+        <img
+          key={index}
+          onClick={() => navigate(`/posts/${id}`)}
+          className={`object-cover ${imgClass}`}
+          src={img}
+          alt={`Post image ${index}`}
+        />
+      );
+    })}
+  </div>
+)}
 
 
 

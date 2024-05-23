@@ -9,6 +9,8 @@ import Login from "./pages/Login";
 import MainLayout from "./Layout/MainLayout";
 import PostDetail from "./pages/PostDetails";
 import ProfileDetail from "./pages/ProfileDetail";
+import FollowersList from "./pages/ProfileDetail/components/FollowersList";
+import FollowingList from "./pages/ProfileDetail/components/FollowingList";
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext);
@@ -61,6 +63,26 @@ export default function useRouteElements() {
       element: (
         <MainLayout>
           <ProfileDetail />,
+        </MainLayout>
+      )
+    },
+    {
+      path: '/profile/:id/followers',
+      index: true,
+
+      element: (
+        <MainLayout>
+          <FollowersList />
+        </MainLayout>
+      )
+    },
+    {
+      path: '/profile/:id/following',
+      index: true,
+
+      element: (
+        <MainLayout>
+          <FollowingList />
         </MainLayout>
       )
     },
