@@ -4,13 +4,13 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC29Ca-GIp5-lSvPCNz-QghftCcaoJ86FA",
-  authDomain: "my-twitter-250dd.firebaseapp.com",
-  projectId: "my-twitter-250dd",
-  storageBucket: "my-twitter-250dd.appspot.com",
-  messagingSenderId: "747662931023",
-  appId: "1:747662931023:web:11c3d86eedc64ccb5aa63a",
-  measurementId: "G-38P594VP2W",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
