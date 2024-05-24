@@ -28,15 +28,12 @@ const Login = () => {
   });
 
   const onSubmit = handleSubmit((data) => {
-    console.log("what the fuck");
-    console.log(data, 444);
 
     const email = data.email;
     const password = data.password;
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential, "this is it");
         // setProfile(userCredential.user.email)
         // setIsAuthenticated(true)
         navigate('/')

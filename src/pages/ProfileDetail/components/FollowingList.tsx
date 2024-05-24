@@ -2,28 +2,57 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import {
   QueryDocumentSnapshot,
   collection,
+  doc,
   onSnapshot,
 } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { db } from "../../../firebase-config";
+import FollowButton, { PartialUserData } from "../../../components/Button/FollowButton";
+import { AppContext, UserData } from "../../../contexts/app.context";
+import UnFollowButton from "../../../components/Button/UnfollowButton";
 
 const FollowingList = () => {
   const [isFollowers, setIsFollowers] = useState(false);
+  const [user, setUser] = useState<UserData>();
+  const { profile } = useContext(AppContext);
+  const [userFollowing, setUserFollowing] = useState<QueryDocumentSnapshot[]>([])
+
+
   const [following, setFollowing] = useState<QueryDocumentSnapshot[]>([]);
 
   const { id } = useParams();
   const navigate = useNavigate();
+
 
   useEffect(() => {
     onSnapshot(
       collection(db, "users", id as string, "following"),
       (snapshot) => {
         setFollowing(snapshot.docs);
-        console.log("here ar");
       }
     );
   }, []);
+
+
+
+
+  useEffect(()=> {
+    if(profile?.uid){
+    onSnapshot(
+      collection(db, "users", profile?.uid as string, "following"),
+      (snapshot) => {
+        setUserFollowing(snapshot.docs);
+      }
+    )
+  }
+  },[profile?.uid])
+
+  const userFollowingIds = userFollowing?.map(doc => doc.data().uid);
+
+  const isFollowing = (id: string) => userFollowingIds?.includes(id);
+
+
 
   const getLinkClass = () => {
     return `relative p-4 px-7 hover:after:absolute hover:after:content-[''] hover:font-bold hover:after:h-0.5 hover:after:w-full hover:after:bg-cyan-500 hover:after:bottom-0 hover:after:left-0`;
@@ -70,16 +99,29 @@ const FollowingList = () => {
           <img
             src={following.data().userImg}
             className="h-10 w-10 rounded-full"
+            onClick={() => navigate(`/profile/${following.data().uid}`)}
           />
           <div>
-            <div className="ml-3 text-base font-bold">
+            <Link to={`/profile/${following.data().uid}`} className="ml-3 text-base font-bold hover:underline" >
               {following.data().name}
-            </div>
+            </Link>
             <div className="ml-3 text-sm">{following.data().username}</div>
           </div>
-          <button className="px-7 leading-3 h-8  bg-black font-bold text-white cursor-pointer hover:bg-slate-800 rounded-3xl ml-auto">
-            Follow
-          </button>
+
+          {isFollowing(following.data().uid) ? (
+    <UnFollowButton className=" px-7 leading-3 h-8  bg-black font-bold text-white cursor-pointer hover:bg-red-100 hover:text-red-500 hover:border-[1px] hover:border-red-500  rounded-3xl ml-auto" user={following.data() as PartialUserData} id={following.data().uid as string}/>
+
+  ) : ( profile?.uid === following.data().uid ? (
+    <></>
+  ): (
+    <FollowButton className="px-7 leading-3 h-8  bg-black font-bold text-white cursor-pointer hover:bg-slate-800 rounded-3xl ml-auto" user={following.data() as PartialUserData} id={following.data().uid}/>
+  )
+  )
+
+  }
+
+
+
         </div>
       ))}
     </div>

@@ -16,14 +16,6 @@ const registerSchema = schema.pick(["email", "password", "confirm_password"]);
 
 export default function RegisterLayout({children} : Props) {
 
-
-  // const closeEditModal = () => setVisible(false);
-  // const openEditModal = (index: number) => {
-  //   setVisible(true);
-  //   console.log("opening edit modal");
-  // };
-
-
   return (
     <div className="relative">
       <div className="  grid grid-cols-7  z-10 top-0 absolute left-0">
@@ -44,7 +36,6 @@ export default function RegisterLayout({children} : Props) {
           </h1>
           {children}
 
-          {/* <img src={img} className="absolute overflow-x-hidden bottom-[-140px] left-[140px] opacity-10 w-[960px] h-[890px]"/> */}
         </div>
 
 

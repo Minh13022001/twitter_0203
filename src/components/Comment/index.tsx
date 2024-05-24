@@ -65,7 +65,6 @@ export default function Comment({ comment, commentId, originalPostId } : Props) 
           );
         }
       } else {
-        // signIn();
         navigate("/login");
       }
     }
@@ -119,7 +118,6 @@ export default function Comment({ comment, commentId, originalPostId } : Props) 
               <ChatBubbleOvalLeftEllipsisIcon
                 onClick={() => {
                   if (!profile) {
-                    // signIn();
                     navigate("/signin");
                   } else {
                     setPostId(originalPostId);

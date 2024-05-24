@@ -18,38 +18,31 @@ export default function Sidebar() {
     useContext(AppContext);
 
     const navigate = useNavigate()
-  //   console.log(currentUser);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if(user){
-        // console.log(user, 'this is user 33333333333333333333333333333')
-        // setProfile({ ...profile, email: user?.email, uid: user?.uid, timestamp: serverTimestamp()} as UserData)
 
           const fetchUser = async () => {
             const docRef = doc(db, "users", user.uid);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
 
-            console.log(user, 'this is user 33333333333333333333333333333')
               setProfile(docSnap.data() as UserData);
             }
           };
           fetchUser()
       } else {
         setProfile(null)
-        console.log('yeah that wat happened')
       }
 
     })
   }, [])
-  console.log(profile, '-----------------------------')
 
   function onSignOut() {
     signOut(auth)
     // setProfile(null);
   }
-  console.log(profile, 5555555555555)
   return (
     <div className="hidden sm:flex flex-col p-2 xl:items-start fixed h-full xl:ml-24">
       <div className="hoverEffect p-0 hover:bg-blue-100 xl:px-1">
@@ -82,7 +75,7 @@ export default function Sidebar() {
           <button className="bg-cyan-400 text-white rounded-full w-56 h-12 font-bold shadow-md hover:brightness-95 text-lg hidden xl:inline"
           onClick={()=>{   
             setOpenTweet(!openTweet);
-            console.log('you clicked the chat button')}}
+           }}
           >
             Tweet
           </button>
@@ -114,7 +107,6 @@ export default function Sidebar() {
   );
 }
 
-// muc dich cua onAuthStateChanged laf de listen cai gi ? 
 
 // khi signin/out thi trigger callback
 //callback : de thay the cho LS
@@ -123,7 +115,6 @@ export default function Sidebar() {
 // set profile
 // clear LS
 // navigate
-
 
 // For example, if a user is signed in, you can fetch additional user data from the Firestore database and update the application state accordingly.
 // isAuthen, setprofile

@@ -27,6 +27,8 @@ import { db, storage } from "../../firebase-config";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { AnimatePresence, motion } from "framer-motion";
 import Post from "../../components/Post";
+import UnFollowButton from "../../components/Button/UnfollowButton";
+import FollowButton from "../../components/Button/FollowButton";
 interface RouteParams {
   id: string;
 }
@@ -46,12 +48,9 @@ const ProfileDetail = () => {
   const [selectedFile, setSelectedFile] = useState<null | string>(null);
   const [user, setUser] = useState<UserData>();
 
-
   const [showEdit, setShowEdit] = useState(false);
-  const [showUnfollow, setShowUnfollow] = useState(false);
 
-
-  const [totalFollowers, setTotalFollowers] = useState<number>()
+  const [totalFollowers, setTotalFollowers] = useState<number>();
   const { id } = useParams();
   const location = useLocation();
 
@@ -63,7 +62,6 @@ const ProfileDetail = () => {
   };
 
   const navigate = useNavigate();
-  console.log(location.pathname, "this is localtion");
 
   const handleImageUpload = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -88,57 +86,31 @@ const ProfileDetail = () => {
         setPosts(snapshot.docs);
       }
     );
-    onSnapshot(collection(db, "users", id as string  , "followers"),
+    onSnapshot(
+      collection(db, "users", id as string, "followers"),
       (snapshot) => {
         setFollowers(snapshot.docs);
-        console.log("likedddddddđ");
       }
     );
-
   }, []);
   const postOfUser = posts.filter((post) => post.data().id === id);
 
-  async function followUser(followerId: string, followingId: string) {
-    if (user) {
-      await setDoc(doc(db, "users", followerId, "following", id as string), {
-        name: user.name,
-        username: user.username,
-        userImg: user.userImg,
-        userId: user.uid,
-      });
-    }
-    if (profile) {
-      await setDoc(doc(db, "users", followingId, "followers", profile.uid), {
-        name: profile.name,
-        username: profile.username,
-        userImg: profile.userImg,
-        userId: profile.uid,
-      })
-    }
-  }
 
-  async function unFollowUser(followerId: string, followingId: string) {
-    if (user) {
-      await deleteDoc(doc(db, "users", followerId, "following", id as string));
-    }
-    if (profile) {
-      await deleteDoc(doc(db, "users", followingId, "followers", profile.uid))
-    }
-    setShowUnfollow(false)
-  }
+
 
 
   // Usage Example
   useEffect(() => {
-    setHasFolowed(followers.findIndex((follower) => follower.id === profile?.uid) !== -1);
-    setTotalFollowers(followers.length)
+    setHasFolowed(
+      followers.findIndex((follower) => follower.id === profile?.uid) !== -1
+    );
+    setTotalFollowers(followers.length);
   }, [followers, profile]);
 
   useEffect(() => {
     if (id === profile?.uid) {
       onSnapshot(doc(db, "users", id as string), (snapshot) => {
         setProfile(snapshot.data() as UserData);
-        // console.log(snapshot.data(), "this is user 22222222222222222222222222");
         setUser(snapshot.data() as UserData);
 
         setName((snapshot.data() as UserData).name);
@@ -146,7 +118,6 @@ const ProfileDetail = () => {
       });
     } else if (id !== profile?.uid) {
       onSnapshot(doc(db, "users", id as string), (snapshot) => {
-        // console.log(snapshot.data(), "this is user 22222222222222222222222222");
         setUser(snapshot.data() as UserData);
         setName((snapshot.data() as UserData).name);
         setUserName((snapshot.data() as UserData).username);
@@ -155,7 +126,6 @@ const ProfileDetail = () => {
   }, [id, db]);
 
   const updateInfo = async () => {
-    console.log("what is");
 
     const docRef = await updateDoc(doc(db, "users", id as string), {
       userImg: avatarImage ?? user?.userImg,
@@ -163,7 +133,6 @@ const ProfileDetail = () => {
       name: name,
       username: userName,
     });
-    console.log("does the update Work????????????");
     // setName(profile?.name);
     // setUserName(profile?.username)
     setCoverImage(null);
@@ -171,13 +140,6 @@ const ProfileDetail = () => {
     setShowEdit(false);
   };
 
-  // console.log(profile, 'this is the UPDATED user nameeeeeeeeeeeeee ')
-
-  // console.log(user, "this is the UPDATED user data ");
-  console.log(followers, 'here it issssssssssssss')
-  // console.log(posts[0]?.id, 'POST 0000000000000')
-  // console.log(posts[1]?.id, 'POST 1111111111111')
-  // console.log(posts[2]?.id, 'POST 2222222222222')
 
   return (
     <div className="xl:ml-[370px] border-l border-r border-gray-200  xl:min-w-[596px] sm:ml-[73px] flex-grow max-w-xl ">
@@ -197,7 +159,7 @@ const ProfileDetail = () => {
         />
       </div>
       <div className="px-4 pt-3 bg-white">
-        <div className="flex h-20">
+        <div className="flex h-20 justify-between">
           <div className="relative -top-20">
             <img
               src={user?.userImg}
@@ -214,22 +176,11 @@ const ProfileDetail = () => {
             </button>
           ) : hasFollowed ? (
             <>
-              <button
-                className="p-4 bg-white rounded-3xl w-28 h-9 py-1 ml-auto border-[1px] font-bold hover:bg-red-100 hover:text-red-500 border-stone-300 tracking-normal hover:border-red-400"
-                onClick={() => setShowUnfollow(true)}
-              >
-                Following
-              </button>
+              <UnFollowButton  user={user} id={id}/>
             </>
           ) : (
-            <>
-              <button
-                className="p-4 bg-white rounded-3xl w-28 h-9 py-1 ml-auto border-[1px] font-bold hover:bg-slate-100 border-stone-300 tracking-normal"
-                onClick={() => followUser(profile?.uid as string, id as string)}
-              >
-                Follow
-              </button>
-            </>
+           
+            <FollowButton  user={user} id={id}/>
           )}
         </div>
         <div className="flex">
@@ -263,16 +214,16 @@ const ProfileDetail = () => {
         </div>
         <div className="flex mt-4 gap-4">
           <div>
-            <Link            to={`/profile/${id}/following`}
->
+            <Link to={`/profile/${id}/following`}>
               <span className="mr-[2px] font-bold text-14px">1304 </span>
               <span className="text-slate-500">Following </span>
             </Link>
           </div>
           <div>
-            <Link            to={`/profile/${id}/followers`}
->
-              <span className="mr-[2px] font-bold text-14px">{totalFollowers}</span>
+            <Link to={`/profile/${id}/followers`}>
+              <span className="mr-[2px] font-bold text-14px">
+                {totalFollowers}
+              </span>
               <span className="text-slate-500 ml-1">Followers </span>
             </Link>
           </div>
@@ -330,7 +281,6 @@ const ProfileDetail = () => {
           onRequestClose={() => setShowEdit(false)}
           className="max-w-lg w-[90%] absolute top-14 left-[50%]  translate-x-[-50%] bg-white border-2 border-gray-200 rounded-xl shadow-md lg:min-w-[700px] lg:max-h-[600px] "
           overlayClassName="fixed inset-0 z-50 bg-black bg-opacity-50"
-
         >
           <div className="p-1">
             <div className="border-b border-gray-200 py-2 px-1.5 flex">
@@ -435,37 +385,7 @@ const ProfileDetail = () => {
         </Modal>
       )}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{showUnfollow && (
-        <Modal
-          isOpen={showUnfollow}
-          onRequestClose={() => setShowUnfollow(false)}
-          overlayClassName="fixed inset-0 z-50 bg-black bg-opacity-50"
-
-          className="max-w-lg  absolute top-44 left-[50%]  translate-x-[-50%] bg-white border-2 border-gray-200 rounded-3xl shadow-md lg:max-w-[330px] lg:max-h-[400px] p-6 "
-        >
-          <div className="flex flex-col justify-center items-start ">
-          <div className="text-xl font-extrabold pl-2">Unfollow {user?.username} ?</div>
-          <div className="mt-2 text-base  text-slate-500 pl-2 leading-6">Their posts will no longer show up in your For You timeline. You can still view their profile, unless their posts are protected. </div>
-          <button className="p-3 bg-black text-white w-full mt-5 rounded-3xl font-extrabold tracking-wide hover:bg-slate-800" onClick={() => unFollowUser(profile?.uid as string, id as string)}
->Unfollow</button>
-          <button className="p-3 bg-white text-black w-full mt-3 rounded-3xl border-slate-300 border-[1px] font-extrabold tracking-wide hover:bg-slate-200" onClick={ () =>setShowUnfollow(false)}>Cancel</button>
-          </div>
-        </Modal>
-      )}
+   
     </div>
   );
 };

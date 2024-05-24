@@ -37,8 +37,6 @@ export default function PostDetail() {
     );
   }, [db, id]);
 
-  // console.log(post, 'isnt it so weirdddddddddddddddddddddddd')
-  console.log(comments[0]?.data(), 'isnt it so weirdddddddddddddddddddddddd')
 
 
   return (

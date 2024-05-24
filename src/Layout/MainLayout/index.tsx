@@ -33,7 +33,6 @@ const MainLayout = ({ children }: Props) => {
         const data = await res.json();
         setRandomUsersResults(data.results || null);
       } catch (error) {
-        console.error("Error fetching random users:", error);
         setRandomUsersResults([]);
       }
     };

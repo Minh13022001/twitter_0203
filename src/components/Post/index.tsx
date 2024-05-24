@@ -45,7 +45,6 @@ export default function Post({ post, id }: Props) {
 
       (snapshot) => {
         setLikes(snapshot.docs);
-        console.log("likedddddddđ");
       }
     );
     // return unsubscribe
@@ -78,8 +77,7 @@ export default function Post({ post, id }: Props) {
     }
   }
 
-  // console.log(profile, "this is after")
-  // console.log(post.data()?.img, post?.data()?.text, 'this is id of the postttt')
+
 
   async function deletePost() {
     if (window.confirm("Are you sure you want to delete this post?")) {
@@ -207,7 +205,6 @@ export default function Post({ post, id }: Props) {
                 } else {
                   setPostId(id);
                   setOpen(!open);
-                  console.log("you clicked the chat button");
                 }
               }}
               className="h-9 w-9 rounded-full p-2 hover:text-sky-500 hover:bg-sky-100"

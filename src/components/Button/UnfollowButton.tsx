@@ -3,17 +3,19 @@ import Modal from "react-modal";
 import { AppContext, UserData } from '../../contexts/app.context';
 import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase-config';
+import { PartialUserData } from './FollowButton';
 
 interface Props {
-    shit: ()=> void
-    user: UserData | undefined
+    user: PartialUserData | undefined
+    id: string | undefined
+    className?: string
 }
 
 
-const UnFollowButton = ({ shit, user }: Props) => {
-    const [showUnfollow, setShowUnfollow] = useState(false);
-    const { profile, setIsAuthenticated, setProfile } = useContext(AppContext);
 
+const UnFollowButton = ({  user, id, className = "p-4 bg-white rounded-3xl w-28 h-9 py-1 ml-auto border-[1px] font-bold hover:bg-red-100 hover:text-red-500 border-stone-300 tracking-normal hover:border-red-400" }: Props) => {
+    const [showUnfollow, setShowUnfollow] = useState(false);
+    const { profile } = useContext(AppContext);
 
 
     async function unFollowUser(followerId: string, followingId: string) {
@@ -29,8 +31,8 @@ const UnFollowButton = ({ shit, user }: Props) => {
     return (
         <div>
       <button
-      onClick={shit}
-      className="p-4 bg-white rounded-3xl w-28 h-9 py-1 ml-auto border-[1px] font-bold hover:bg-red-100 hover:text-red-500 border-stone-300 tracking-normal hover:border-red-400"
+      onClick={()=> setShowUnfollow(true)}
+      className={className}
       >
         Following
       </button>

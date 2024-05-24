@@ -27,13 +27,11 @@ const Register = () => {
 
   const onSubmit = handleSubmit((data) => {
     const body = omit(data, ["confirm_password"]);
-    console.log("what the fuck");
     const email = body.email
     const password = body.password
 
     createUserWithEmailAndPassword(auth, email, password)
     .then(async (userCredential) => {
-      console.log(userCredential, 'this is it');
       
       const user = userCredential.user;
       const userDocRef = doc(db, "users", user.uid);
@@ -53,25 +51,6 @@ const Register = () => {
     .catch((error) => {
       console.log(error);
     });
-
-
-    // const addUser = async () => {
-    //   if (loading) return;
-    //   setLoading(true);
-  
-    //   const docRef = await addDoc(collection(db, "posts"), {
-    //     id: currentUser.uid,
-    //     text: input,
-    //     userImg: currentUser.userImg,
-    //     timestamp: serverTimestamp(),
-    //     name: currentUser.name,
-    //     username: currentUser.username,
-    //   });
-  
-  
-
-    // };
-
 
   });
 
